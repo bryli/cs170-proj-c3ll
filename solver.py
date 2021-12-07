@@ -33,7 +33,7 @@ def solve(tasks):
     Returns:
         output: list of igloos in order of polishing  
     """
-    seed(285303794)
+    # seed(285303794)
     newtasks = tasks.copy()
     shuffle(newtasks)
     curScore = score(tasks)
@@ -44,8 +44,10 @@ def solve(tasks):
     else:
         newtasks = tasks.copy()
     SIZE = len(tasks)
-    STEPS = 1000
+    STEPS = 100000
     for i in range(STEPS):
+        if i % (STEPS // 100) == 0:
+            print(str(i / (STEPS // 100)) + "%")
         volatility = temp(1 - (i + 1)/STEPS, SIZE)
         swaps = iter(sample(range(0, SIZE), int(volatility // 2 * 2)))
         for swap1, swap2 in zip(swaps, swaps):
@@ -62,11 +64,11 @@ def solve(tasks):
 
 # Here's an example of how to run your solver.
 if __name__ == '__main__':
-    # TEST_SINGLE = "small/small-77.in"
-    TEST_SINGLE = ""
+    TEST_SINGLE = "small/small-1.in"
+    # TEST_SINGLE = ""
     if TEST_SINGLE:
         input_path = 'inputs/{}'.format(TEST_SINGLE)
-        output_path = 'outputs/{}.out'.format(TEST_SINGLE)
+        output_path = 'outputs/{}.out'.format(TEST_SINGLE[:-3])
         tasks = read_input_file(input_path)
         output = solve(tasks)
         write_output_file(output_path, output)
