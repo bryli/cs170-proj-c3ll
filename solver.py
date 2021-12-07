@@ -44,10 +44,10 @@ def solve(tasks, prScore=False):
     else:
         newtasks = tasks.copy()
     SIZE = len(tasks)
-    STEPS = 1000
+    STEPS = 10000
     for i in range(STEPS):
-        # if i % (STEPS // 100) == 0:
-        #     print(str(i / (STEPS // 100)) + "%")
+        # if i % (STEPS // 10) == 0:
+        #     print(str(i / (STEPS // 10) * 10) + "%")
         volatility = temp(1 - (i + 1)/STEPS, SIZE)
         swaps = iter(sample(range(0, SIZE), int(volatility // 2 * 2)))
         for swap1, swap2 in zip(swaps, swaps):
@@ -60,13 +60,13 @@ def solve(tasks, prScore=False):
             else:
                 newtasks = tasks.copy()
     if prScore:
-        print(actual_score(tasks))
+        print(score(tasks))
     return output_str(tasks)
 
 
 # Here's an example of how to run your solver.
 if __name__ == '__main__':
-    # TEST_SINGLE = "small/small-1.in"
+    # TEST_SINGLE = "small/small-77.in"
     TEST_SINGLE = ""
     if TEST_SINGLE:
         input_path = 'inputs/{}'.format(TEST_SINGLE)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         write_output_file(output_path, output)
     else:
         for size in os.listdir('inputs/'):
-            if size not in ['small']:
+            if size not in ['medium']:
                 continue
             for input_file in os.listdir('inputs/{}/'.format(size)):
                 if size not in input_file:
