@@ -44,7 +44,7 @@ def solve(tasks, prScore=False):
     else:
         newtasks = tasks.copy()
     SIZE = len(tasks)
-    STEPS = 10000
+    STEPS = 100000
     for i in range(STEPS):
         # if i % (STEPS // 10) == 0:
         #     print(str(i / (STEPS // 10) * 10) + "%")
