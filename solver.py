@@ -23,7 +23,7 @@ def score(tasks):
         time += task.get_duration()
         if time > 1440:
             return score
-        score += task.get_late_benefit(task.get_deadline() - time)
+        score += task.get_late_benefit(time - task.get_deadline())
     return score
 
 def solve(tasks, prScore=False):
@@ -60,7 +60,7 @@ def solve(tasks, prScore=False):
             else:
                 newtasks = tasks.copy()
     if prScore:
-        print(score(tasks))
+        print(actual_score(tasks))
     return output_str(tasks)
 
 
