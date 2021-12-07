@@ -46,7 +46,7 @@ def solve(tasks, prScore=False):
     else:
         newtasks = tasks.copy()
     SIZE = len(tasks)
-    STEPS = 10000
+    STEPS = 1000
     for i in range(STEPS):
         # if i % (STEPS // 10) == 0:
         #     print(str(i / (STEPS // 10) * 10) + "%")
@@ -62,7 +62,7 @@ def solve(tasks, prScore=False):
             else:
                 newtasks = tasks.copy()
     if prScore:
-        print(score(tasks))
+        print(prScore + str(curScore))
     return output_str(tasks)
 
 
@@ -73,17 +73,18 @@ def process(input_tuple):
         return
     input_path = 'inputs/{}/{}'.format(size, input_file)
     output_path = 'outputs/{}/{}.out'.format(size, input_file[:-3])
-    print(input_path, output_path)
-    tasks = read_input_file(input_path)
-    print("Solving...")
-    output = solve(tasks)
-    print("Completed")
-    write_output_file(output_path, output)
+    if not os.path.exists(output_path):
+        tasks = read_input_file(input_path)
+        print(input_file[:-3] + ":\tSolving...")
+        output = solve(tasks, input_file[:-3] + ":\t")
+        write_output_file(output_path, output)
+    else:
+        print(input_file[:-3] + " skipped: " + output_path + " exists!")
 
 # Here's an example of how to run your solver.
 if __name__ == '__main__':
-    TEST_SINGLE = "small/small-1.in"
-    #TEST_SINGLE = ""
+    #TEST_SINGLE = "small/small-1.in"
+    TEST_SINGLE = ""
     if TEST_SINGLE:
         input_path = 'inputs/{}'.format(TEST_SINGLE)
         output_path = 'outputs/{}.out'.format(TEST_SINGLE[:-3])
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     else:
         for size in os.listdir('inputs/'):
             pool = Pool()
-            if size not in ['mediun', 'large']:
+            if size not in ['small', 'large']:
                 continue
             pool.map(process, zip([input_file for input_file in os.listdir('inputs/{}/'.format(size))], itertools.repeat(size)))
             # for input_file in os.listdir('inputs/{}/'.format(size)):
