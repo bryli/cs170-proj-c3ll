@@ -44,14 +44,15 @@ def solve(tasks):
     else:
         newtasks = tasks.copy()
     SIZE = len(tasks)
-    STEPS = SIZE
+    STEPS = 1000
     for i in range(STEPS):
         volatility = temp(1 - (i + 1)/STEPS, SIZE)
         swaps = iter(sample(range(0, SIZE), int(volatility // 2 * 2)))
         for swap1, swap2 in zip(swaps, swaps):
             newtasks[swap1], newtasks[swap2] = newtasks[swap2], newtasks[swap1]
             newScore = score(newtasks)
-            if exp((curScore - newScore)/volatility) > random():
+            exponent = (curScore - newScore)/volatility
+            if exponent <= 0 and exp(exponent) < random():
                 tasks = newtasks.copy()
                 curScore = newScore
             else:
@@ -61,18 +62,26 @@ def solve(tasks):
 
 # Here's an example of how to run your solver.
 if __name__ == '__main__':
-    for size in os.listdir('inputs/'):
-        if size not in ['small', 'medium', 'large']:
-            continue
-        for input_file in os.listdir('inputs/{}/'.format(size)):
-            if size not in input_file:
+    # TEST_SINGLE = "small/small-77.in"
+    TEST_SINGLE = ""
+    if TEST_SINGLE:
+        input_path = 'inputs/{}'.format(TEST_SINGLE)
+        output_path = 'outputs/{}.out'.format(TEST_SINGLE)
+        tasks = read_input_file(input_path)
+        output = solve(tasks)
+        write_output_file(output_path, output)
+    else:
+        for size in os.listdir('inputs/'):
+            if size not in ['small']:
                 continue
-            input_path = 'inputs/{}/{}'.format(size, input_file)
-            output_path = 'outputs/{}/{}.out'.format(size, input_file[:-3])
-            print(input_path, output_path)
-            print("Reading input file, " + input_path + "...")
-            tasks = read_input_file(input_path)
-            print("Solving...")
-            output = solve(tasks)
-            print("Writing to output, " + output_path + "...")
-            write_output_file(output_path, output)
+            for input_file in os.listdir('inputs/{}/'.format(size)):
+                if size not in input_file:
+                    continue
+                input_path = 'inputs/{}/{}'.format(size, input_file)
+                output_path = 'outputs/{}/{}.out'.format(size, input_file[:-3])
+                print(input_path, output_path)
+                tasks = read_input_file(input_path)
+                print("Solving...")
+                output = solve(tasks)
+                print("Completed")
+                write_output_file(output_path, output)
