@@ -2,7 +2,7 @@ from parse import read_input_file, write_output_file
 import os
 from random import random, shuffle, seed, sample
 from math import exp
-from multiprocessing import Pool
+from multiprocessing import Pool, current_process
 import itertools
 
 def output_str(tasks):
@@ -73,13 +73,13 @@ def process(input_tuple):
         return
     input_path = 'inputs/{}/{}'.format(size, input_file)
     output_path = 'outputs/{}/{}.out'.format(size, input_file[:-3])
-    if not os.path.exists(output_path):
-        tasks = read_input_file(input_path)
-        print(input_file[:-3] + ":\tSolving...")
-        output = solve(tasks, input_file[:-3] + ":\t")
-        write_output_file(output_path, output)
-    else:
-        pass #print(input_file[:-3] + " skipped: " + output_path + " exists!")
+    #if not os.path.exists(output_path):
+    tasks = read_input_file(input_path)
+    print(input_file[:-3] + ":\tSolving...\t" + current_process().name)
+    output = solve(tasks, input_file[:-3] + ":\t")
+    write_output_file(output_path, output)
+    #else:
+    #    pass #print(input_file[:-3] + " skipped: " + output_path + " exists!")
 
 # Here's an example of how to run your solver.
 if __name__ == '__main__':
@@ -93,10 +93,10 @@ if __name__ == '__main__':
         write_output_file(output_path, output)
     else:
         for size in sorted(os.listdir('inputs/')):
-            pool = Pool(processes=6)
+            pool = Pool()
             if size not in ['small', 'medium']:
                 continue
-            processed = os.listdir('outputs/{}/'.format(size))
+            processed = [x[:-4] for x in os.listdir('outputs/{}/'.format(size))]
             pool.map(process, zip([input_file for input_file in os.listdir('inputs/{}/'.format(size)) if input_file[:-3] not in processed], itertools.repeat(size)))
             # for input_file in os.listdir('inputs/{}/'.format(size)):
             #     if size not in input_file:
