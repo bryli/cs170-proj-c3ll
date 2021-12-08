@@ -94,7 +94,7 @@ if __name__ == '__main__':
     else:
         for size in sorted(os.listdir('inputs/')):
             pool = Pool()
-            if size not in ['small', 'medium']:
+            if size not in ['small', 'medium', 'large']:
                 continue
             processed = [x[:-4] for x in os.listdir('outputs/{}/'.format(size))]
             pool.map(process, zip([input_file for input_file in os.listdir('inputs/{}/'.format(size)) if input_file[:-3] not in processed], itertools.repeat(size)))
