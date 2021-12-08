@@ -58,7 +58,7 @@ def refineSol(tasks, taskOrder, prScore=False):
                 else:
                     newtasks = tasks.copy()
     if prScore:
-        print(prScore + str(curScore) + " <==\t" + str(oldScore))
+        print("%s%18.13f <= %18.13f\tDiff %6.2f\tRelDiff %6.2f" % (prScore, curScore, oldScore, curScore - oldScore, (curScore - oldScore)/oldScore))
     return output_str(tasks)
 
 
