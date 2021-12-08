@@ -4,6 +4,7 @@ from random import random, shuffle, seed, sample
 from math import exp
 from multiprocessing import Pool, current_process
 import itertools
+from prepare_submission import processOutput
 
 def output_str(tasks):
     out = []
@@ -98,6 +99,7 @@ if __name__ == '__main__':
                 continue
             processed = [x[:-4] for x in os.listdir('outputs/{}/'.format(size))]
             pool.map(process, zip([input_file for input_file in os.listdir('inputs/{}/'.format(size)) if input_file[:-3] not in processed], itertools.repeat(size)))
+        processOutput()
             # for input_file in os.listdir('inputs/{}/'.format(size)):
             #     if size not in input_file:
             #         continue
